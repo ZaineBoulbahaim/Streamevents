@@ -78,17 +78,26 @@ python manage.py runserver
 ````
 
 ## Variables d'entorn (env.example)
-
+```bash
 SECRET_KEY=canvia-aixo
 DEBUG=1
 ALLOWED_HOSTS=localhost,127.0.0.1
 MONGO_URL=mongodb://localhost:27017
 DB_NAME=streamevents_db
+````
 
 ## Comandes útils
+```bash
+````
 
 ## Migrar a MongoDB
+```bash
+````
 
 ## Fixtures (exemple)
+```bash
+````
 
 ## Seeds (exemple d'script)
+```bash
+````

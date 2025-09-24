@@ -75,7 +75,7 @@ python manage.py createsuperuser
 
 # 9. Executa el servidor
 python manage.py runserver
-``
+````
 
 ## Variables d'entorn (env.example)
 

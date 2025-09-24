@@ -19,6 +19,7 @@ Es tracta d’una base educativa amb bones pràctiques: ús d’entorns, estruct
 - **Altres:** python-dotenv per gestionar secrets, Pillow per a imatges
 
 ## Estructura Simplificada
+```bash
 streamevents/
 ├─ manage.py
 ├─ config/
@@ -33,7 +34,7 @@ streamevents/
 ├─ .gitignore
 ├─ env.example
 └─ README.md
-
+````
 
 ## Requisits previs
 - Python 3.10 o superior

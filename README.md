@@ -102,3 +102,21 @@ DB_NAME=streamevents_db
 ## Seeds (exemple d'script)
 ```bash
 ````
+
+## Seeds (exemple d'script)
+
+Per generar usuaris de prova i grups al sistema, utilitza la comanda `seed_users` que hem creat a l'app `users`.
+
+### Com utilitzar la comanda
+
+```bash
+
+# Crear 10 usuaris de prova per defecte (sense eliminar existents)
+python manage.py seed_users
+
+# Crear 20 usuaris de prova
+python manage.py seed_users --users 20
+
+# Crear 15 usuaris de prova i eliminar els existents abans
+python manage.py seed_users --users 15 --clear
+````

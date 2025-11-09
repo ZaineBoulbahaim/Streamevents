@@ -1,0 +1,29 @@
+{% extends "users/base.html" %}
+{% load static %}  <!-- <-- ESTA LÍNEA ES NECESARIA -->
+{% block title %}El meu perfil | StreamEvents{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2 class="mb-3">Perfil de {{ user.username }}</h2>
+
+    {% if user.avatar %}
+        <img src="{{ user.avatar.url }}" alt="Avatar de {{ user.username }}" class="rounded-circle mt-3 shadow" width="120" height="120">
+    {% else %}
+        <img src="{% static 'img/avatar.jpg' %}" alt="Avatar per defecte" class="rounded-circle mt-3 shadow" width="120" height="120">
+    {% endif %}
+
+    <p class="mt-3"><strong>Nom complet:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+    <p><strong>Correu:</strong> {{ user.email }}</p>
+    
+    {% if user.display_name %}
+        <p><strong>Nom públic:</strong> {{ user.display_name }}</p>
+    {% endif %}
+    {% if user.bio %}
+        <p class="mt-2"><strong>Sobre mi:</strong> {{ user.bio }}</p>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{% url 'users:edit_profile' %}" class="btn btn-primary">Editar perfil</a>
+    </div>
+</div>
+{% endblock %}

@@ -93,6 +93,15 @@ MESSAGE_TAGS = {  # MOD: Adaptació a classes Bootstrap
     messages.ERROR: 'danger',
 }
 
+
+# Per veure els emails de restabliment a la consola (no enviar correus reals)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# MEDIA per avatars
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
 # (Opcional futur producció)
 # CSRF_COOKIE_SECURE = True  # MOD
 # SESSION_COOKIE_SECURE = True  # MOD

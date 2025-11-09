@@ -1,0 +1,20 @@
+{% extends "users/base.html" %}
+{% block title %}Inici | StreamEvents{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column justify-content-center align-items-center text-center" style="height: 70vh;">
+    <h1 class="display-3 mb-3">Benvingut a StreamEvents 🎬</h1>
+    <p class="lead mb-4">Descobreix esdeveniments, concerts i pel·lícules al teu gust!</p>
+
+    {% if user.is_authenticated %}
+        <p class="lead">Hola {{ user.username }}, gràcies per tornar!</p>
+        <a href="{% url 'users:profile' %}" class="btn btn-primary btn-lg">Anar al meu perfil</a>
+    {% else %}
+        <p class="lead">Crea un compte o inicia sessió per començar a gaudir del contingut.</p>
+        <div>
+            <a href="{% url 'users:register' %}" class="btn btn-success btn-lg me-3">Registrar-se</a>
+            <a href="{% url 'users:login' %}" class="btn btn-outline-primary btn-lg">Iniciar sessió</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "users/base.html" %}
+{% block title %}Registra't | StreamEvents{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <h2 class="text-center mb-4">Crea un compte nou</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success w-100">Registrar-me</button>
+        </form>                 
+
+        <p class="text-center mt-3">
+            Ja tens un compte? <a href="{% url 'users:login' %}">Inicia sessió</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

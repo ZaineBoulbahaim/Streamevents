@@ -1,0 +1,19 @@
+{% extends "users/base.html" %}
+{% load static %}
+{% block title %}Editar perfil | StreamEvents{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Editar el meu perfil</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="mx-auto" style="max-width: 500px;">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-success">Desar canvis</button>
+            <a href="{% url 'users:profile' %}" class="btn btn-secondary">Cancel·lar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

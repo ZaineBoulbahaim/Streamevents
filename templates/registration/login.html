@@ -1,0 +1,27 @@
+{% extends "users/base.html" %}
+{% block title %}Inicia sessió | StreamEvents{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <h2 class="text-center mb-4">Inicia sessió</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="mb-3">
+                <label class="form-label">Usuari o correu</label>
+                {{ form.username }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Contrasenya</label>
+                {{ form.password }}
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        </form>
+
+        <p class="text-center mt-3">
+            No tens compte? <a href="{% url 'users:register' %}">Registra't aquí</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

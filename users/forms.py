@@ -30,23 +30,33 @@ class  CustomUserCreationForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
     
-    # Método para comprobar que no existe un usuario con ese mismo email
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
-            raise ValidationError("Aquest correu ja està registrat.")
-        return email
+    # # Método para comprobar que no existe un usuario con ese mismo email
+    # def clean_email(self):
+    #     email = self.cleaned_data.get('email')
+    #     if User.objects.filter(email=email).exists():
+    #         raise ValidationError("Aquest correu ja està registrat.")
+    #     return email
     
     # Método para comprobar el nombre de usuario
     # Usamos re.match para expresiones regulares
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        pattern = r'^[\w.@+-]+$'
-        if not re.match(pattern, username):
-            raise ValidationError("El nom d'usuari només pot contenir lletres, números i @/./+/-/_")
-        if User.objects.filter(username=username).exists():
-            raise ValidationError("Aquest nom d'usuari ja està registrat.")
+        if not username:
+            raise ValidationError('El nom d’usuari és obligatori.')
+
+        if User.objects.filter(username=username):
+            raise ValidationError('Aquest nom d’usuari ja existeix.')
+
+        if not username.isalnum():
+            raise ValidationError('El nom d’usuari només pot contenir lletres i números.')
+
         return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email and User.objects.filter(email=email):
+            raise ValidationError('Ja existeix un usuari amb aquest email.')
+        return email
     
     # Método que comprueba que la primera constraseña es igual a la segunda
     # Además debe tener un minímo de criterios para ser aceptada

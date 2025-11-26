@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, CustomUserUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.db import DatabaseError
+from django.contrib.auth.views import PasswordResetCompleteView
+from django.urls import reverse_lazy
 
 User = get_user_model()
 
@@ -132,3 +134,10 @@ def public_profile_view(request, username):
 
     # Renderizamos la pàgina con el context
     return render(request, 'users/public_profile.html', {'profile_user': user})
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    # Especifica la URL de login correcta
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['login_url'] = reverse_lazy('users:login')
+        return context

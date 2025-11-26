@@ -22,6 +22,10 @@
         <p class="text-center mt-3">
             No tens compte? <a href="{% url 'users:register' %}">Registra't aquí</a>
         </p>
+        <p class="text-center mt-2">
+            T'has olvidat la contraseña <br>
+            <a href="{% url 'password_reset' %}">Recuperarla aquí</a>
+        </p>
     </div>
 </div>
 {% endblock %}

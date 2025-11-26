@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 import re, imghdr
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 # útil para las traducciones
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate
@@ -193,3 +193,13 @@ class CustomAuthenticationForm(AuthenticationForm):
         
         return self.cleaned_data
 
+class CustomPasswordResetForm(PasswordResetForm):
+    def get_users(self, email):
+        """
+        Return users with the given email (compatible con Djongo).
+        """
+        email_field_name = User.get_email_field_name()
+        try:
+            return User.objects.filter(**{f"{email_field_name}__exact": email})
+        except Exception:
+            return User.objects.none()

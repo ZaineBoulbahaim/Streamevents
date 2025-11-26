@@ -97,6 +97,9 @@ MESSAGE_TAGS = {  # MOD: Adaptació a classes Bootstrap
 # Per veure els emails de restabliment a la consola (no enviar correus reals)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Dirección desde la que se enviarán los correos
+DEFAULT_FROM_EMAIL = 'noreply@streamevents.com'
+
 # MEDIA per avatars
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

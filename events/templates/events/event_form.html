@@ -1,0 +1,304 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block events_title %}{{ title }}{% endblock %}
+
+{% block events_content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">{{ title }}</h2> <!-- Título dinámico según si creas o editas -->
+            </div>
+            
+            <div class="card-body">
+                <!-- Formulario de creación/edición -->
+                <form method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %} <!-- Protección CSRF -->
+
+                    <!-- Errores generales del formulario -->
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Campo: Título -->
+                    <div class="mb-3">
+                        <label for="{{ form.title.id_for_label }}" class="form-label">
+                            {{ form.title.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.title }} <!-- Input renderizado -->
+                        {% if form.title.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.title.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">Títol únic per al teu esdeveniment.</div>
+                    </div>
+                    
+                    <!-- Campo: Descripción -->
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            {{ form.description.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.description.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Campo: Categoría -->
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.category.id_for_label }}" class="form-label">
+                                {{ form.category.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.category }}
+                            {% if form.category.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.category.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Campo: Fecha y hora -->
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.scheduled_date.id_for_label }}" class="form-label">
+                                {{ form.scheduled_date.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.scheduled_date }} <!-- Input datetime-local -->
+                            {% if form.scheduled_date.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.scheduled_date.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="form-text">Data i hora programades.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Campo: Máximo de espectadores -->
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.max_viewers.id_for_label }}" class="form-label">
+                                {{ form.max_viewers.label }}
+                            </label>
+                            {{ form.max_viewers }}
+                            {% if form.max_viewers.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.max_viewers.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="form-text">Entre 1 i 1000 espectadors.</div>
+                        </div>
+                        
+                        <!-- Campo: Estado (solo en edición) -->
+                        {% if form.status %}
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.status.id_for_label }}" class="form-label">
+                                {{ form.status.label }}
+                            </label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.status.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Campo: Thumbnail -->
+                    <div class="mb-3">
+                        <label for="{{ form.thumbnail.id_for_label }}" class="form-label">
+                            {{ form.thumbnail.label }}
+                        </label>
+                        
+                        {% if event and event.thumbnail %}
+                        <div class="mb-2">
+                            <img src="{{ event.thumbnail.url }}" alt="Thumbnail actual" class="img-thumbnail" style="max-height: 150px;"> <!-- Imagen actual -->
+                            <div class="form-text mt-1">Imatge actual. Deixa en blanc per mantenir-la.</div>
+                        </div>
+                        {% endif %}
+                        
+                        {{ form.thumbnail }}
+                        {% if form.thumbnail.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.thumbnail.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">Imatge de portada. Format recomanat 16:9.</div>
+                    </div>
+                    
+                    <!-- Campo: URL del stream -->
+                    <div class="mb-3">
+                        <label for="{{ form.stream_url.id_for_label }}" class="form-label">
+                            {{ form.stream_url.label }}
+                        </label>
+                        {{ form.stream_url }}
+                        {% if form.stream_url.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.stream_url.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">URLs suportades: YouTube, Twitch.</div>
+                    </div>
+                    
+                    <!-- Campo: Etiquetas -->
+                    <div class="mb-3">
+                        <label for="{{ form.tags.id_for_label }}" class="form-label">
+                            {{ form.tags.label }}
+                        </label>
+                        {{ form.tags }}
+                        {% if form.tags.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.tags.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">Separa les etiquetes amb comes.</div>
+                    </div>
+                    
+                    <!-- Campo: Destacado (solo admin) -->
+                    {% if user.is_staff or user.is_superuser %}
+                    <div class="mb-3 form-check">
+                        {{ form.is_featured }} <!-- Checkbox -->
+                        <label for="{{ form.is_featured.id_for_label }}" class="form-check-label">
+                            {{ form.is_featured.label }}
+                        </label>
+                        <div class="form-text">Permet destacar l'esdeveniment.</div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Botones -->
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% if event %}{% url 'events:event_detail' event.pk %}{% else %}{% url 'events:event_list' %}{% endif %}" 
+                           class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Cancel·lar
+                        </a>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            {% if event %}
+                            <i class="fas fa-save"></i> Actualitzar esdeveniment
+                            {% else %}
+                            <i class="fas fa-plus"></i> Crear esdeveniment
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script: fija fecha mínima y valida espectadores -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const dateField = document.querySelector('input[type="datetime-local"]'); /* Campo de fecha */
+    if (dateField) {
+        const now = new Date();
+        dateField.min = now.toISOString().slice(0, 16); /* Fecha mínima = ahora */
+    }
+    
+    const maxViewersField = document.getElementById('{{ form.max_viewers.id_for_label }}'); /* Campo espectadores */
+    if (maxViewersField) {
+        maxViewersField.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            if (value < 1 || value > 1000) this.classList.add('is-invalid'); /* Marca error */
+            else this.classList.remove('is-invalid'); /* Elimina error */
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const tagsInput = document.getElementById('{{ form.tags.id_for_label }}'); /* Input etiquetas */
+    const tagsContainer = document.createElement('div'); /* Contenedor sugerencias */
+    tagsContainer.className = 'tags-suggestions mt-2';
+    tagsInput.parentNode.insertBefore(tagsContainer, tagsInput.nextSibling);
+    
+    let debounceTimer;
+    
+    /* Busca sugerencias con retardo */
+    tagsInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(fetchTags, 300);
+    });
+    
+    /* Llamada AJAX al endpoint */
+    function fetchTags() {
+        const query = tagsInput.value.split(',').pop().trim(); /* Último fragmento */
+        if (query.length < 2) {
+            tagsContainer.innerHTML = '';
+            return;
+        }
+        
+        fetch(`{% url 'events:tags_autocomplete' %}?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => displaySuggestions(data.tags, query))
+            .catch(error => console.error('Error:', error));
+    }
+    
+    /* Muestra sugerencias */
+    function displaySuggestions(tags, query) {
+        if (!tags.length) {
+            tagsContainer.innerHTML = '';
+            return;
+        }
+        
+        let html = '<div class="card"><div class="card-body p-2"><small class="text-muted">Etiquetes suggerides:</small><div class="d-flex flex-wrap gap-1 mt-1">';
+        
+        tags.forEach(tag => {
+            const highlighted = tag.replace(new RegExp(query, 'gi'), m => `<strong>${m}</strong>`); /* Resalta coincidencia */
+            html += `<button type="button" class="btn btn-sm btn-outline-primary tag-suggestion" onclick="addTag('${tag.replace(/'/g, "\\'")}')">${highlighted}</button>`;
+        });
+        
+        html += '</div></div></div>';
+        tagsContainer.innerHTML = html;
+    }
+    
+    /* Inserta una etiqueta en el input */
+    window.addTag = function(tag) {
+        const currentValue = tagsInput.value.trim();
+        const tagsArray = currentValue ? currentValue.split(',').map(t => t.trim()) : [];
+        if (tagsArray.length > 0) tagsArray.pop(); /* Borra la búsqueda actual */
+        
+        tagsArray.push(tag); /* Añade etiqueta */
+        tagsInput.value = tagsArray.join(', ') + ', '; /* Actualiza input */
+        tagsContainer.innerHTML = ''; /* Limpia sugerencias */
+        tagsInput.focus();
+    };
+    
+    /* Muestra sugerencias al enfocar */
+    tagsInput.addEventListener('focus', function() {
+        if (tagsInput.value.trim()) fetchTags();
+    });
+});
+</script>
+{% endblock %}

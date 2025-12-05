@@ -1,0 +1,107 @@
+<!-- events/templates/events/includes/event_card.html -->
+
+<!-- Contenedor principal de la tarjeta de evento -->
+<div class="card h-100 event-card {% if featured %}border-warning{% endif %}">
+    
+    <!-- Si el evento está marcado como destacado, mostramos un encabezado especial -->
+    {% if featured %}
+    <div class="card-header bg-warning text-dark">
+        <i class="fas fa-star"></i> Destacat
+    </div>
+    {% endif %}
+    
+    <!-- ===================== MINIATURA / IMAGEN ===================== -->
+    <!-- Si el evento tiene thumbnail, se muestra la imagen -->
+    {% if event.thumbnail %}
+        <img src="{{ event.thumbnail.url }}" class="card-img-top" alt="{{ event.title }}" 
+             style="height: 180px; object-fit: cover;">
+    
+    <!-- Si NO tiene thumbnail, se muestra un icono según categoría -->
+    {% else %}
+        <div class="card-img-top d-flex align-items-center justify-content-center bg-secondary"
+            style="height: 180px;">
+            
+            <!-- Icono dinámico según categoría del evento -->
+            <i class="fas 
+                {% if event.category == 'gaming' %}fa-gamepad
+                {% elif event.category == 'music' %}fa-music
+                {% elif event.category == 'talk' %}fa-comments
+                {% elif event.category == 'education' %}fa-graduation-cap
+                {% elif event.category == 'sports' %}fa-running
+                {% elif event.category == 'entertainment' %}fa-film
+                {% elif event.category == 'technology' %}fa-laptop-code
+                {% elif event.category == 'art' %}fa-palette
+                {% else %}fa-calendar-alt{% endif %}
+                fa-3x text-white"
+                title="{{ event.get_category_display }}">
+            </i>
+        </div>
+    {% endif %}
+    
+    <!-- ===================== CONTENIDO DE LA TARJETA ===================== -->
+    <div class="card-body d-flex flex-column">
+        
+        <!-- Badges de estado del evento (scheduled, live, finished, cancelled) -->
+        <div class="mb-2">
+            {% if event.status == 'scheduled' %}
+            <span class="badge bg-info">Programat</span>
+
+            {% elif event.status == 'live' %}
+            <span class="badge bg-success">En Directe</span>
+
+            {% elif event.status == 'finished' %}
+            <span class="badge bg-secondary">Finalitzat</span>
+
+            {% elif event.status == 'cancelled' %}
+            <span class="badge bg-danger">Cancel·lat</span>
+            {% endif %}
+            
+            <!-- Badge con el nombre de la categoría -->
+            <span class="badge bg-primary">{{ event.get_category_display }}</span>
+        </div>
+        
+        <!-- Título del evento (limitado a 50 caracteres) -->
+        <h5 class="card-title">{{ event.title|truncatechars:50 }}</h5>
+        
+        <!-- Información adicional del evento -->
+        <p class="card-text flex-grow-1">
+            <small class="text-muted">
+                <!-- Fecha programada -->
+                <i class="far fa-calendar"></i> {{ event.scheduled_date|date:"d/m/Y H:i" }}
+            </small>
+            <br>
+            <small class="text-muted">
+                <!-- Nombre del creador del evento -->
+                <i class="fas fa-user"></i> {{ event.creator.get_full_name|default:event.creator.username }}
+            </small>
+        </p>
+        
+        <!-- ===================== ETIQUETAS ===================== -->
+        <!-- Mostrar hasta 3 etiquetas del evento -->
+        {% if event.get_tags_list %}
+        <div class="mb-2">
+            {% for tag in event.get_tags_list|slice:":3" %}
+            <span class="badge bg-light text-dark border">{{ tag }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Botón para ver los detalles del evento -->
+        <a href="{% url 'events:event_detail' event.pk %}" class="btn btn-outline-primary mt-auto">
+            Veure detalls <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+    
+    <!-- ===================== PIE DE LA TARJETA ===================== -->
+    <div class="card-footer text-muted">
+        <small>
+            <!-- Número máximo de espectadores del evento -->
+            <i class="fas fa-users"></i> {{ event.max_viewers }} espectadors
+            
+            <!-- Mostrar estrella si el evento es destacado pero no está en modo featured -->
+            {% if event.is_featured and not featured %}
+            <i class="fas fa-star text-warning ms-2"></i>
+            {% endif %}
+        </small>
+    </div>
+</div>

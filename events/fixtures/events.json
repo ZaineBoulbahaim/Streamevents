@@ -1,0 +1,272 @@
+[
+  {
+    "model": "events.event",
+    "pk": 1,
+    "fields": {
+      "title": "Torneig de League of Legends",
+      "description": "Torneig competitiu de LoL amb els millors equips de la regió. Premis per als guanyadors i molt d'entreteniment garantit.",
+      "creator": 2,
+      "category": "gaming",
+      "scheduled_date": "2024-03-15T20:00:00Z",
+      "status": "finished",
+      "max_viewers": 500,
+      "is_featured": true,
+      "tags": "gaming,esports,torneig,league of legends",
+      "stream_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "created_at": "2024-02-01T10:00:00Z",
+      "updated_at": "2024-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 2,
+    "fields": {
+      "title": "Concert de Música Electrònica",
+      "description": "Sessió en directe de música electrònica amb DJs internacionals. Una experiència única de so i llum.",
+      "creator": 3,
+      "category": "music",
+      "scheduled_date": "2024-03-20T22:00:00Z",
+      "status": "scheduled",
+      "max_viewers": 1000,
+      "is_featured": true,
+      "tags": "musica,electrònica,concert,dj",
+      "stream_url": "https://www.twitch.tv/monstercat",
+      "created_at": "2024-02-05T14:30:00Z",
+      "updated_at": "2024-02-05T14:30:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 3,
+    "fields": {
+      "title": "Xerrada sobre Intel·ligència Artificial",
+      "description": "Discussió sobre els avenços més recents en IA i el seu impacte en la societat moderna. Amb experts del sector.",
+      "creator": 4,
+      "category": "talk",
+      "scheduled_date": "2024-03-10T18:00:00Z",
+      "status": "live",
+      "max_viewers": 300,
+      "is_featured": false,
+      "tags": "tecnologia,ia,intel·ligència artificial,xerrada",
+      "stream_url": "https://www.youtube.com/watch?v=JGwWNGJdvx8",
+      "created_at": "2024-02-03T09:15:00Z",
+      "updated_at": "2024-02-03T09:15:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 4,
+    "fields": {
+      "title": "Curs de Programació Web",
+      "description": "Taller pràctic per aprendre els fonaments de Django i React. Perfecte per a principiants.",
+      "creator": 5,
+      "category": "education",
+      "scheduled_date": "2024-03-25T16:00:00Z",
+      "status": "scheduled",
+      "max_viewers": 200,
+      "is_featured": false,
+      "tags": "educació,programació,django,react,taller",
+      "stream_url": "https://www.youtube.com/watch?v=F5mRW0jo-4I",
+      "created_at": "2024-02-10T11:45:00Z",
+      "updated_at": "2024-02-10T11:45:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 5,
+    "fields": {
+      "title": "Partit de Basket en Directe",
+      "description": "Enfrontament entre els dos millors equips de la lliga local. Expectativa màxima garantida.",
+      "creator": 6,
+      "category": "sports",
+      "scheduled_date": "2024-03-05T21:00:00Z",
+      "status": "finished",
+      "max_viewers": 800,
+      "is_featured": true,
+      "tags": "esports,basket,partit,competició",
+      "stream_url": "https://www.twitch.tv/nba",
+      "created_at": "2024-02-02T16:20:00Z",
+      "updated_at": "2024-02-02T16:20:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 6,
+    "fields": {
+      "title": "Festival d'Entreteniment Digital",
+      "description": "Esdeveniment amb múltiples activitats: gaming, música, entrevistes i més. 24 hores de contingut.",
+      "creator": 7,
+      "category": "entertainment",
+      "scheduled_date": "2024-04-01T12:00:00Z",
+      "status": "scheduled",
+      "max_viewers": 1500,
+      "is_featured": true,
+      "tags": "entreteniment,festival,digital,24h",
+      "stream_url": "https://www.youtube.com/watch?v=9bZkp7q19f0",
+      "created_at": "2024-02-15T13:10:00Z",
+      "updated_at": "2024-02-15T13:10:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 7,
+    "fields": {
+      "title": "Presentació del Nou Smartphone",
+      "description": "Llançament mundial del darrer model de smartphone amb les tecnologies més avançades.",
+      "creator": 8,
+      "category": "technology",
+      "scheduled_date": "2024-03-18T19:00:00Z",
+      "status": "scheduled",
+      "max_viewers": 1200,
+      "is_featured": false,
+      "tags": "tecnologia,smartphone,llançament,gadgets",
+      "stream_url": "https://www.youtube.com/watch?v=8YPXv7xKhJA",
+      "created_at": "2024-02-08T10:30:00Z",
+      "updated_at": "2024-02-08T10:30:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 8,
+    "fields": {
+      "title": "Taller de Pintura Digital",
+      "description": "Apreneu les tècniques bàsiques de pintura digital amb Photoshop i Procreate. Material inclòs.",
+      "creator": 9,
+      "category": "art",
+      "scheduled_date": "2024-03-22T17:00:00Z",
+      "status": "scheduled",
+      "max_viewers": 100,
+      "is_featured": false,
+      "tags": "art,creativitat,pintura digital,taller",
+      "stream_url": "https://www.twitch.tv/bobross",
+      "created_at": "2024-02-12T15:45:00Z",
+      "updated_at": "2024-02-12T15:45:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 9,
+    "fields": {
+      "title": "Marató de Videojocs Retrò",
+      "description": "24 hores jugant a videojocs clàssics dels anys 80 i 90. Reviviu la vostra infantesa!",
+      "creator": 10,
+      "category": "gaming",
+      "scheduled_date": "2024-03-30T10:00:00Z",
+      "status": "scheduled",
+      "max_viewers": 400,
+      "is_featured": false,
+      "tags": "gaming,retro,marató,nostàlgia",
+      "stream_url": "https://www.youtube.com/watch?v=DLzxrzFCyOs",
+      "created_at": "2024-02-18T12:00:00Z",
+      "updated_at": "2024-02-18T12:00:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 10,
+    "fields": {
+      "title": "Sessió de Jazz Acústic",
+      "description": "Concert íntim de jazz acústic amb músics locals de gran talent.",
+      "creator": 11,
+      "category": "music",
+      "scheduled_date": "2024-03-08T20:30:00Z",
+      "status": "finished",
+      "max_viewers": 150,
+      "is_featured": false,
+      "tags": "música,jazz,acústic,concert",
+      "stream_url": "https://www.youtube.com/watch?v=0G3_kG5FFfQ",
+      "created_at": "2024-02-07T09:20:00Z",
+      "updated_at": "2024-02-07T09:20:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 11,
+    "fields": {
+      "title": "Debat sobre Canvi Climàtic",
+      "description": "Experts debaten sobre les solucions al canvi climàtic i el paper de la tecnologia.",
+      "creator": 12,
+      "category": "talk",
+      "scheduled_date": "2024-03-28T19:30:00Z",
+      "status": "scheduled",
+      "max_viewers": 350,
+      "is_featured": true,
+      "tags": "xerrada,debat,canvi climàtic,medi ambient",
+      "stream_url": "https://www.youtube.com/watch?v=0JXV3o0SICs",
+      "created_at": "2024-02-14T11:00:00Z",
+      "updated_at": "2024-02-14T11:00:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 12,
+    "fields": {
+      "title": "Curs d'Anglès per a Developers",
+      "description": "Apreneu l'anglès tècnic necessari per a la programació i la documentació.",
+      "creator": 13,
+      "category": "education",
+      "scheduled_date": "2024-04-05T18:00:00Z",
+      "status": "scheduled",
+      "max_viewers": 180,
+      "is_featured": false,
+      "tags": "educació,anglès,programació,curs",
+      "stream_url": "https://www.youtube.com/watch?v=3QhU9jd03a0",
+      "created_at": "2024-02-20T14:15:00Z",
+      "updated_at": "2024-02-20T14:15:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 13,
+    "fields": {
+      "title": "Campionat de Tennis Virtual",
+      "description": "Competició de tennis en realitat virtual amb premis espectaculars.",
+      "creator": 14,
+      "category": "sports",
+      "scheduled_date": "2024-03-12T16:00:00Z",
+      "status": "cancelled",
+      "max_viewers": 250,
+      "is_featured": false,
+      "tags": "esports,tennis,vr,realitat virtual",
+      "stream_url": "https://www.twitch.tv/esl_csgo",
+      "created_at": "2024-02-04T13:40:00Z",
+      "updated_at": "2024-02-04T13:40:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 14,
+    "fields": {
+      "title": "Show d'Improvisació Còmica",
+      "description": "Espectacle d'improvisació còmica amb actors professionals. Riu sense parar!",
+      "creator": 15,
+      "category": "entertainment",
+      "scheduled_date": "2024-04-10T21:00:00Z",
+      "status": "scheduled",
+      "max_viewers": 600,
+      "is_featured": false,
+      "tags": "entreteniment,comèdia,improvisació,show",
+      "stream_url": "https://www.youtube.com/watch?v=sOnqjkJTMaA",
+      "created_at": "2024-02-22T17:30:00Z",
+      "updated_at": "2024-02-22T17:30:00Z"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 15,
+    "fields": {
+      "title": "Altres Activitats Comunitàries",
+      "description": "Espai per a activitats diverses organitzades per la comunitat.",
+      "creator": 31,
+      "category": "other",
+      "scheduled_date": "2024-03-17T15:00:00Z",
+      "status": "scheduled",
+      "max_viewers": 120,
+      "is_featured": false,
+      "tags": "comunitat,activitats,miscel·lània",
+      "stream_url": "https://www.youtube.com/watch?v=hTWKbfoikeg",
+      "created_at": "2024-02-25T10:50:00Z",
+      "updated_at": "2024-02-25T10:50:00Z"
+    }
+  }
+]

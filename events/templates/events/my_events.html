@@ -1,0 +1,217 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block events_title %}Els meus esdeveniments{% endblock %}
+
+{% block events_content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Els meus esdeveniments</h1>
+            <a href="{% url 'events:event_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nou esdeveniment
+            </a>
+        </div>
+        
+        <!-- Estadísticas generales del usuario -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total</h5>
+                        <p class="card-text display-6">{{ total_events }}</p>  <!-- # Total de eventos creados -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">En directe</h5>
+                        <p class="card-text display-6">{{ live_events }}</p>  <!-- # Eventos actualmente en vivo -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Programats</h5>
+                        <p class="card-text display-6">{{ scheduled_events }}</p>  <!-- # Programados para el futuro -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card bg-secondary text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Finalitzats</h5>
+                        <p class="card-text display-6">{{ finished_events }}</p>  <!-- # Eventos ya finalizados -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filtros rápidos por estado -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Filtra per estat</h5>
+                <div class="btn-group" role="group">
+                    <a href="{% url 'events:my_events' %}" 
+                       class="btn {% if not current_status_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">Tots</a>  <!-- # Filtro: todos -->
+                    
+                    <a href="{% url 'events:my_events' %}?status=scheduled" 
+                       class="btn {% if current_status_filter == 'scheduled' %}btn-info{% else %}btn-outline-info{% endif %}">Programats</a> <!-- # Filtro: Programados -->
+                    
+                    <a href="{% url 'events:my_events' %}?status=live" 
+                       class="btn {% if current_status_filter == 'live' %}btn-success{% else %}btn-outline-success{% endif %}">En directe</a> <!-- # Filtro: en vivo -->
+                    
+                    <a href="{% url 'events:my_events' %}?status=finished" 
+                       class="btn {% if current_status_filter == 'finished' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">Finalitzats</a> <!-- # Filtro: finalizados -->
+                    
+                    <a href="{% url 'events:my_events' %}?status=cancelled" 
+                       class="btn {% if current_status_filter == 'cancelled' %}btn-danger{% else %}btn-outline-danger{% endif %}">Cancel·lats</a> <!-- # Filtro: cancelados -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabla principal de eventos -->
+        {% if page_obj %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Títol</th>
+                        <th>Data programada</th>
+                        <th>Categoria</th>
+                        <th>Estat</th>
+                        <th>Espectadors</th>
+                        <th>Accions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in page_obj %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'events:event_detail' event.pk %}" class="text-decoration-none">
+                                {{ event.title|truncatechars:40 }}  <!-- # Limita el título a 40 caracteres -->
+                            </a>
+
+                            {% if event.is_featured %}
+                            <span class="badge bg-warning ms-1"><i class="fas fa-star"></i></span>  <!-- # Evento destacado -->
+                            {% endif %}
+                        </td>
+
+                        <!-- Fecha con formato + tiempo restante -->
+                        <td>
+                            {{ event.scheduled_date|date:"d/m/Y H:i" }}
+                            {% if event.is_upcoming %}
+                            <br>
+                            <small class="text-muted">
+                                <i class="far fa-clock"></i> en {{ event.scheduled_date|timeuntil:now }}  <!-- # Tiempo restante -->
+                            </small>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="badge bg-primary">{{ event.get_category_display }}</span> <!-- # Categoría legible -->
+                        </td>
+
+                        <!-- Estado visual usando badges -->
+                        <td>
+                            {% if event.status == 'scheduled' %}
+                            <span class="badge bg-info">Programat</span>
+                            {% elif event.status == 'live' %}
+                            <span class="badge bg-success">En Directe</span>
+                            {% elif event.status == 'finished' %}
+                            <span class="badge bg-secondary">Finalitzat</span>
+                            {% elif event.status == 'cancelled' %}
+                            <span class="badge bg-danger">Cancel·lat</span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ event.max_viewers }}</td> <!-- # Límite de espectadores -->
+
+                        <!-- Botones rápidos de acción -->
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'events:event_detail' event.pk %}" class="btn btn-outline-primary" title="Veure">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'events:event_update' event.pk %}" class="btn btn-outline-secondary" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'events:event_delete' event.pk %}" class="btn btn-outline-danger" title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        {% if page_obj.paginator.num_pages > 1 %}
+        <nav aria-label="Paginació">
+            <ul class="pagination justify-content-center">
+
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_status_filter %}&status={{ current_status_filter }}{% endif %}">Anterior</a>  <!-- # Página anterior -->
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li> <!-- # Página actual -->
+                    
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}{% if current_status_filter %}&status={{ current_status_filter }}{% endif %}">{{ num }}</a></li> <!-- # Páginas cercanas -->
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_status_filter %}&status={{ current_status_filter }}{% endif %}">Següent</a> <!-- # Página siguiente -->
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            Encara no has creat cap esdeveniment.
+            <a href="{% url 'events:event_create' %}" class="alert-link">Crea el primer!</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Acciones rápidas al final -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Accions ràpides</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'events:event_list' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-globe"></i> Veure tots els esdeveniments
+                    </a>
+                    <a href="{% url 'events:event_create' %}" class="btn btn-outline-success">
+                        <i class="fas fa-plus-circle"></i> Crear esdeveniment ràpid
+                    </a>
+                    {% if user.is_staff or user.is_superuser %}
+                    <a href="{% url 'admin:events_event_changelist' %}" class="btn btn-outline-warning">
+                        <i class="fas fa-cog"></i> Administrar esdeveniments
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block events_title %}Esdeveniments{% endblock %}
+
+{% block events_content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="mb-3">Esdeveniments</h1>
+        
+        <!-- Botón para crear nuevo evento -->
+        {% if user.is_authenticated %}
+        <div class="mb-4">
+            <a href="{% url 'events:event_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Crear nou esdeveniment
+            </a>
+            <a href="{% url 'events:my_events' %}" class="btn btn-outline-primary">
+                <i class="fas fa-calendar"></i> Els meus esdeveniments
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Filtros de búsqueda -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Cerca i filtra</h5>
+        {% include 'events/includes/event_filters.html' %}
+    </div>
+</div>
+
+{% load tags_cloud %}
+{% tags_cloud %}
+
+<!-- Eventos destacados -->
+{% if featured_events %}
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="mb-3">Esdeveniments destacats</h2>
+        <div class="row">
+            {% for event in featured_events %}
+            <div class="col-md-4 mb-4">
+                {% include 'events/includes/event_card.html' with event=event featured=True %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Todos los eventos -->
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-3">Tots els esdeveniments</h2>
+        
+        {% if page_obj %}
+        <div class="row">
+            {% for event in page_obj %}
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                {% include 'events/includes/event_card.html' with event=event %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Paginación -->
+        {% if page_obj.paginator.num_pages > 1 %}
+        <nav aria-label="Paginació d'esdeveniments">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                        Anterior
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                            {{ num }}
+                        </a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                        Següent
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="alert alert-info">
+            No s'han trobat esdeveniments amb els filtres aplicats.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Estadísticas -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Estadístiques</h5>
+                <p class="card-text">
+                    <span class="badge bg-primary">{{ total_events }}</span> esdeveniments en total
+                    {% if featured_events %}
+                    · <span class="badge bg-warning">{{ featured_events|length }}</span> destacats
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

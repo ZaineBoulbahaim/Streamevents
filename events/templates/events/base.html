@@ -1,0 +1,37 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block title %}{% block events_title %}{% endblock %} | StreamEvents{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}">Inici</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'events:event_list' %}">Esdeveniments</a>
+            </li>
+            {% block events_breadcrumb %}{% endblock %}
+        </ol>
+    </nav>
+    
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Contenido principal -->
+    {% block events_content %}
+    {% endblock %}
+</div>
+{% endblock %}

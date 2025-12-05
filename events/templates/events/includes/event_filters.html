@@ -1,0 +1,78 @@
+<!-- Cargar filtros personalizados definidos en events_extras -->
+{% load events_extras %}
+
+<!-- Formulario GET para filtrar los eventos -->
+<form method="get" action="{% url 'events:event_list' %}" class="row g-3">
+
+    <!-- Campo: búsqueda por texto -->
+    <div class="col-md-3">
+        {{ search_form.search.label_tag }}   <!-- Etiqueta -->
+        {{ search_form.search }}             <!-- Input -->
+    </div>
+    
+    <!-- Campo: categoría -->
+    <div class="col-md-2">
+        {{ search_form.category.label_tag }}
+        {{ search_form.category }}
+    </div>
+    
+    <!-- Campo: estado del evento -->
+    <div class="col-md-2">
+        {{ search_form.status.label_tag }}
+        {{ search_form.status }}
+    </div>
+    
+    <!-- Campo: fecha desde -->
+    <div class="col-md-2">
+        {{ search_form.date_from.label_tag }}
+        {{ search_form.date_from }}
+    </div>
+    
+    <!-- Campo: fecha hasta -->
+    <div class="col-md-2">
+        {{ search_form.date_to.label_tag }}
+        {{ search_form.date_to }}
+    </div>
+    
+    <!-- Botón de búsqueda -->
+    <div class="col-md-1 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">
+            <i class="fas fa-search"></i> Cerca
+        </button>
+    </div>
+    
+    <!-- Mostrar opciones seleccionadas si hay filtros en la URL -->
+    {% if request.GET %}
+    <div class="col-12">
+
+        <!-- Botón para limpiar todos los filtros -->
+        <a href="{% url 'events:event_list' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-times"></i> Netejar filtres
+        </a>
+        
+        <!-- BADGES indicando qué filtros están activos -->
+
+        <!-- Búsqueda por texto -->
+        {% if request.GET.search %}
+        <span class="badge bg-info ms-2">
+            Cerca: "{{ request.GET.search }}"
+        </span>
+        {% endif %}
+
+        <!-- Categoría seleccionada (usando el filtro personalizado get_choice_display) -->
+        {% if request.GET.category %}
+        <span class="badge bg-info ms-2">
+            Categoria: {{ request.GET.category|get_choice_display:search_form.category.field.choices }}
+        </span>
+        {% endif %}
+
+        <!-- Estado seleccionado -->
+        {% if request.GET.status %}
+        <span class="badge bg-info ms-2">
+            Estat: {{ request.GET.status|get_choice_display:search_form.status.field.choices }}
+        </span>
+        {% endif %}
+
+    </div>
+    {% endif %}
+</form>

@@ -1,0 +1,96 @@
+{% extends 'events/base.html' %}
+
+<!-- Título de la página -->
+{% block events_title %}Eliminar esdeveniment{% endblock %}
+
+{% block events_content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+
+        <!-- Tarjeta principal con estilo de advertencia -->
+        <div class="card border-danger">
+
+            <!-- Encabezado en rojo indicando acción peligrosa -->
+            <div class="card-header bg-danger text-white">
+                <h2 class="mb-0">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Confirmar eliminació
+                </h2>
+            </div>
+            
+            <div class="card-body">
+
+                <!-- Alerta explicando que la acción es irreversible -->
+                <div class="alert alert-warning">
+                    <h4 class="alert-heading">Atenció!</h4>
+                    <p>Estàs a punt d'eliminar l'esdeveniment <strong>"{{ event.title }}"</strong>.</p>
+                    <hr>
+                    <p class="mb-0">
+                        Aquesta acció <strong>NO ES POT DESFER</strong>. 
+                        Tota la informació de l'esdeveniment es perdrà permanentment.
+                    </p>
+                </div>
+                
+                <!--  RESUMEN DEL EVENTO  -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Detalls de l'esdeveniment</h5>
+
+                        <!-- Lista con información relevante del evento -->
+                        <ul class="list-unstyled">
+                            <li><strong>Títol:</strong> {{ event.title }}</li>
+                            <li><strong>Categoria:</strong> {{ event.get_category_display }}</li>
+                            <li><strong>Data:</strong> {{ event.scheduled_date|date:"d/m/Y H:i" }}</li>
+                            <li><strong>Estat:</strong> {{ event.get_status_display }}</li>
+                            <li><strong>Creador:</strong> {{ event.creator.get_full_name|default:event.creator.username }}</li>
+                            <li><strong>Creat:</strong> {{ event.created_at|date:"d/m/Y" }}</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!--  FORMULARIO DE CONFIRMACIÓN  -->
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <!-- Checkbox obligatorio para permitir eliminar -->
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="confirmDelete" required>
+                        <label class="form-check-label" for="confirmDelete">
+                            Confirmo que vull eliminar aquest esdeveniment permanentment
+                        </label>
+                    </div>
+                    
+                    <!-- Botones: cancelar y confirmar eliminación -->
+                    <div class="d-flex justify-content-between">
+
+                        <!-- Botón para regresar al detalle sin borrar -->
+                        <a href="{% url 'events:event_detail' event.pk %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Cancel·lar
+                        </a>
+                        
+                        <!-- Botón de eliminar (deshabilitado por defecto) -->
+                        <button type="submit" class="btn btn-danger" id="deleteButton" disabled>
+                            <i class="fas fa-trash"></i> Eliminar definitivament
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  SCRIPT: habilita el botón solo si se marca el checkbox  -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkbox = document.getElementById('confirmDelete');   // Checkbox de confirmación
+    const deleteButton = document.getElementById('deleteButton'); // Botón de eliminar
+    
+    /* Cuando el usuario marca o desmarca el checkbox,
+       habilita o deshabilita el botón de eliminar */
+    checkbox.addEventListener('change', function() {
+        deleteButton.disabled = !this.checked;
+    });
+});
+</script>
+
+{% endblock %}

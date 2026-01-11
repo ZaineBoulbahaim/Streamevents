@@ -1,122 +1,116 @@
 # StreamEvents
 
-## Objectius
-Aplicació **Django** per gestionar esdeveniments i usuaris de forma extensible.  
-Es tracta d’una base educativa amb bones pràctiques: ús d’entorns, estructura clara, separació de `templates`/`static`, i integració opcional de **MongoDB** (via `djongo`).  
+## 📌 Descripció
 
-### Objectius principals
-- Practicar un projecte Django modular.
-- Treballar amb un usuari personalitzat (app `users`).
-- Organitzar `templates`, `static` i `media` correctament.
-- Introduir fitxers d’entorn (`.env`) i bones pràctiques amb Git.
-- Preparar el terreny per a futures funcionalitats (API, auth avançada, etc.).
+**StreamEvents** és una aplicació web desenvolupada amb **Django** que
+permet la gestió d'esdeveniments en directe amb un **sistema de xat en
+temps real** per a la interacció entre usuaris.
 
-## Stack Principal
-- **Backend:** Django 5
-- **Base de dades:** MongoDB (opcional)
-- **ORM Mongo:** djongo / pymongo
-- **Frontend:** Templates HTML + CSS a `static/`
-- **Altres:** python-dotenv per gestionar secrets, Pillow per a imatges
+El projecte està orientat a l'aprenentatge de bones pràctiques amb
+Django, integració amb **MongoDB mitjançant Djongo**, comunicació
+**frontend-backend amb JSON** i ús de **JavaScript (Fetch API)** per
+simular funcionalitats en temps real mitjançant *polling*.
 
-## Estructura Simplificada
-```bash
+------------------------------------------------------------------------
+
+## 🎯 Objectius del Projecte
+
+-   Desenvolupar una aplicació Django modular i escalable.
+-   Implementar un **sistema de xat en directe** associat als
+    esdeveniments.
+-   Treballar amb **CustomUser** i permisos.
+-   Utilitzar **MongoDB** com a base de dades.
+-   Comunicar frontend i backend amb **JSON (API REST)**.
+-   Aplicar validacions, seguretat i bones pràctiques (CSRF, XSS, soft
+    delete).
+-   Simular temps real mitjançant *polling* amb JavaScript.
+
+------------------------------------------------------------------------
+
+## 🧱 Stack Tecnològic
+
+-   **Backend:** Django 5\
+-   **Base de dades:** MongoDB\
+-   **Connector MongoDB:** Djongo / pymongo\
+-   **Frontend:** HTML + Bootstrap 5\
+-   **JavaScript:** Fetch API (polling)\
+-   **Altres llibreries:** python-dotenv, Pillow
+
+------------------------------------------------------------------------
+
+## 📂 Estructura del Projecte
+
+``` bash
 streamevents/
 ├─ manage.py
 ├─ config/
 ├─ users/
+├─ events/
+├─ chat/
+│  ├─ models.py
+│  ├─ views.py
+│  ├─ forms.py
+│  ├─ urls.py
+│  ├─ templates/chat/
+│  │  └─ includes/chat_box.html
+│  └─ static/chat/
+│     ├─ js/chat.js
+│     └─ css/chat.css
 ├─ templates/
-│ └─ base.html
+│  └─ base.html
 ├─ static/
-│ └─ css/
-│ └─ main.css
 ├─ media/
 ├─ requirements.txt
 ├─ .gitignore
 ├─ env.example
 └─ README.md
-````
+```
 
-## Requisits previs
-- Python 3.10 o superior
-- pip
-- Entorn virtual (venv)
-- MongoDB instal·lat i actiu a `localhost:27017` (si es vol usar)
+------------------------------------------------------------------------
 
-## Instal·lació ràpida
+## ⚙️ Requisits previs
 
-```bash
-# 1. Clonar el repositori
+-   Python 3.10 o superior\
+-   pip\
+-   Entorn virtual (venv)\
+-   MongoDB actiu a `localhost:27017`
+
+------------------------------------------------------------------------
+
+## 🚀 Instal·lació
+
+``` bash
 git clone https://github.com/usuari/streamevents.git
 cd streamevents
-
-# 2. Crear i activar entorn virtual
 python -m venv venv
-# Linux/macOS
 source venv/bin/activate
-# Windows PowerShell
-venv\Scripts\Activate.ps1
-
-# 3. Instal·lar dependències
 pip install -r requirements.txt
-
-# 4. Configurar variables d'entorn
 cp env.example .env
-
-# 5. Instal·la dependències
-pip install -r requirements.txt
-
-# 6. Configura fitxer .env
-cp env.example .env
-
-# 7. Migracions inicials
+python manage.py makemigrations
 python manage.py migrate
-
-# 8. Crea superusuari
 python manage.py createsuperuser
-
-# 9. Executa el servidor
 python manage.py runserver
-````
+```
 
-## Variables d'entorn (env.example)
-```bash
-SECRET_KEY=canvia-aixo
-DEBUG=1
-ALLOWED_HOSTS=localhost,127.0.0.1
-MONGO_URL=mongodb://localhost:27017
-DB_NAME=streamevents_db
-````
+------------------------------------------------------------------------
 
-## Comandes útils
-```bash
-````
+## 💬 Sistema de Xat en Directe
 
-## Migrar a MongoDB
-```bash
-````
+-   Enviament de missatges durant esdeveniments en estat **live**
+-   Polling cada 3 segons
+-   Validació de missatges
+-   Eliminació amb permisos (soft delete)
+-   Protecció CSRF i XSS
+-   Disseny responsive
 
-## Fixtures (exemple)
-```bash
-````
+------------------------------------------------------------------------
 
-## Seeds (exemple d'script)
-```bash
-````
+## 🧪 Seeds
 
-## Seeds (exemple d'script)
-
-Per generar usuaris de prova i grups al sistema, utilitza la comanda `seed_users` que hem creat a l'app `users`.
-
-### Com utilitzar la comanda
-
-```bash
-
-# Crear 10 usuaris de prova per defecte (sense eliminar existents)
+``` bash
 python manage.py seed_users
-
-# Crear 20 usuaris de prova
 python manage.py seed_users --users 20
-
-# Crear 15 usuaris de prova i eliminar els existents abans
 python manage.py seed_users --users 15 --clear
-````
+```
+
+------------------------------------------------------------------------

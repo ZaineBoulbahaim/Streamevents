@@ -1,0 +1,7 @@
+{% for msg in messages %}
+<div class="mb-2 {% if msg.is_highlighted %}bg-warning p-2 rounded{% endif %}">
+    <strong>{{ msg.full_name }}:</strong> {{ msg.message }}
+</div>
+{% empty %}
+<p class="text-muted">No hay mensajes todavía.</p>
+{% endfor %}

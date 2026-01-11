@@ -140,10 +140,6 @@ class Event(models.Model):
             return [tag.strip() for tag in self.tags.split(',') if tag.strip()]
         return []
 
-    # Placeholder para futuras funciones de streaming
-    def get_stream_embed_url(self):
-        return None
-
     # Obtener miniatura de YouTube desde URL
     def get_youtube_thumbnail(self):
         if not self.stream_url:
@@ -234,3 +230,21 @@ class Event(models.Model):
             with connection.cursor() as cursor:
                 cursor.execute("UPDATE events_event SET thumbnail = %s WHERE id = %s",
                                [self.thumbnail.name, self.id])
+    
+    def get_stream_embed_url(self, host=None):
+        """Devuelve la URL embebida correcta para YouTube o Twitch"""
+        if not self.stream_url:
+            return None
+
+        # YouTube
+        youtube_id = self.get_youtube_id()
+        if youtube_id:
+            return f"https://www.youtube.com/embed/{youtube_id}"
+
+        # Twitch
+        if 'twitch.tv' in self.stream_url and host:
+            channel = self.stream_url.split('twitch.tv/')[-1]
+            return f"https://player.twitch.tv/?channel={channel}&parent={host}"
+
+        return None
+

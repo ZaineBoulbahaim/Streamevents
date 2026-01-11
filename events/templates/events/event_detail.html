@@ -6,233 +6,70 @@
 {% block events_content %}
 <div class="row">
 
-    <!-- Columna principal donde se muestran los detalles completos del evento -->
+    <!-- Columna central: streaming y info -->
     <div class="col-lg-8">
-
-        <!-- Tarjeta principal con título, estado y acciones -->
-        <div class="card mb-4">
-            <div class="card-body">
-
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <h1 class="card-title">{{ event.title }}</h1>
-
-                        <!-- Badges informativos del estado, categoría y si es destacado -->
-                        <div class="mb-3">
-                            {% if event.status == 'scheduled' %}
-                            <span class="badge bg-info fs-6">Programat</span>
-                            {% elif event.status == 'live' %}
-                            <span class="badge bg-success fs-6">En Directe</span>
-                            {% elif event.status == 'finished' %}
-                            <span class="badge bg-secondary fs-6">Finalitzat</span>
-                            {% elif event.status == 'cancelled' %}
-                            <span class="badge bg-danger fs-6">Cancel·lat</span>
-                            {% endif %}
-                            
-                            <span class="badge bg-primary fs-6">{{ event.get_category_display }}</span>
-                            
-                            {% if event.is_featured %}
-                            <span class="badge bg-warning fs-6"><i class="fas fa-star"></i> Destacat</span>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <!-- Botones de editar y eliminar visibles solo para el creador -->
-                    {% if is_creator %}
-                    <div class="btn-group">
-                        <a href="{% url 'events:event_update' event.pk %}" class="btn btn-outline-primary"><i class="fas fa-edit"></i> Editar</a>
-                        <a href="{% url 'events:event_delete' event.pk %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i> Eliminar</a>
-                    </div>
-                    {% endif %}
-                </div>
-
-                <!-- Información básica del evento (fecha, duración, creador, etc.) -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <p class="mb-2"><i class="far fa-calendar text-primary"></i> <strong>Data i hora:</strong> {{ event.scheduled_date|date:"l, d F Y - H:i" }}</p>
-                        <p class="mb-2"><i class="fas fa-clock text-primary"></i> <strong>Durada estimada:</strong> {{ event.get_duration }} minuts</p>
-                        <p class="mb-2"><i class="fas fa-users text-primary"></i> <strong>Espectadors:</strong> {{ event.max_viewers }} màxim</p>
-                    </div>
-
-                    <div class="col-md-6">
-                        <p class="mb-2"><i class="fas fa-user text-primary"></i> <strong>Creador:</strong>
-                            <a href="{% url 'users:public_profile' event.creator.username %}" class="text-decoration-none">{{ event.creator.get_full_name|default:event.creator.username }}</a>
-                        </p>
-                        <p class="mb-2"><i class="far fa-calendar-plus text-primary"></i> <strong>Creat:</strong> {{ event.created_at|date:"d/m/Y" }}</p>
-
-                        <!-- Enlace al streaming si existe -->
-                        {% if event.stream_url %}
-                        <p class="mb-2"><i class="fas fa-link text-primary"></i> <strong>Stream URL:</strong>
-                            <a href="{{ event.stream_url }}" target="_blank" class="text-decoration-none">Enllaç al directe</a>
-                        </p>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Descripción del evento -->
-                <div class="mb-4">
-                    <h5>Descripció</h5>
-                    <div class="card">
-                        <div class="card-body">
-                            {{ event.description|linebreaks }}
-                        </div>
-                    </div>
-                </div>
-
+        <div class="mb-4 text-center">
+            <h1>{{ event.title }}</h1>
+            <div class="mb-2">
+                {% if event.status == 'scheduled' %}
+                    <span class="badge bg-info fs-6">Programat</span>
+                {% elif event.status == 'live' %}
+                    <span class="badge bg-success fs-6">En Directe</span>
+                {% elif event.status == 'finished' %}
+                    <span class="badge bg-secondary fs-6">Finalitzat</span>
+                {% elif event.status == 'cancelled' %}
+                    <span class="badge bg-danger fs-6">Cancel·lat</span>
+                {% endif %}
+                <span class="badge bg-primary fs-6">{{ event.get_category_display }}</span>
+                {% if event.is_featured %}
+                    <span class="badge bg-warning fs-6"><i class="fas fa-star"></i> Destacat</span>
+                {% endif %}
             </div>
         </div>
 
-        <!-- Bloque para incrustar streaming (YouTube, Twitch u otro) -->
         {% if event.stream_url %}
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-video"></i> Streaming</h5>
-
-                <!-- Si el streaming es de YouTube -->
-                {% if 'youtube.com' in event.stream_url or 'youtu.be' in event.stream_url %}
-                {% with youtube_thumbnail=event.get_youtube_thumbnail %}
-                
-                {% if youtube_thumbnail %}
-                <!-- Miniatura personalizada de YouTube -->
-                <div class="text-center">
-                    <div class="position-relative" style="max-width: 800px; margin: 0 auto;">
-                        <a href="{{ event.stream_url }}" target="_blank" class="d-block text-decoration-none">
-                            <img src="{{ youtube_thumbnail }}" class="img-fluid rounded shadow" style="max-height: 400px; object-fit: cover;">
-
-                            <!-- Botón de Play sobre la imagen -->
-                            <div class="position-absolute top-50 start-50 translate-middle">
-                                <div class="btn btn-danger btn-lg rounded-circle" style="width: 80px; height: 80px; border: 4px solid white; display: flex; align-items: center; justify-content: center;">
-                                    <div style="width: 0; height: 0; border-top: 15px solid transparent; border-bottom: 15px solid transparent; border-left: 25px solid white;"></div>
-                                </div>
-                            </div>
-
-                            <!-- Badge indicando que es un vídeo de YouTube -->
-                            <div class="position-absolute top-0 end-0 m-3">
-                                <span class="badge bg-danger"><i class="fab fa-youtube me-1"></i> YouTube</span>
-                            </div>
-                        </a>
-
-                        <!-- Botón de abrir en YouTube -->
-                        <div class="mt-3">
-                            <a href="{{ event.stream_url }}" target="_blank" class="btn btn-outline-danger"><i class="fab fa-youtube me-2"></i> Obrir a YouTube</a>
-                        </div>
+            <div class="streaming-container mb-4">
+                {% if embed_url %}
+                    <div class="ratio ratio-16x9 mb-4">
+                        <iframe 
+                            src="{{ embed_url }}" 
+                            title="Streaming" 
+                            allowfullscreen 
+                            frameborder="0">
+                        </iframe>
                     </div>
-                </div>
-
                 {% else %}
-                <!-- Caso cuando no se puede obtener la miniatura -->
-                <div class="alert alert-warning text-center">
-                    <i class="fab fa-youtube text-danger fa-2x mb-3"></i>
-                    <p>Contingut de YouTube</p>
-                    <a href="{{ event.stream_url }}" target="_blank" class="btn btn-danger">Veure a YouTube</a>
-                </div>
-                {% endif %}
-                {% endwith %}
-
-                <!-- Si el streaming es de Twitch -->
-                {% elif 'twitch.tv' in event.stream_url %}
-                <div class="alert alert-dark text-center" style="background-color: #6441a5; color: white;">
-                    <i class="fab fa-twitch fa-3x mb-3"></i>
-                    <h5>Stream de Twitch</h5>
-                    <a href="{{ event.stream_url }}" target="_blank" class="btn btn-light text-dark"><i class="fab fa-twitch me-2"></i> Veure a Twitch</a>
-                </div>
-
-                <!-- Streaming de otro tipo -->
-                {% else %}
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-video fa-3x mb-3"></i>
-                    <a href="{{ event.stream_url }}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt me-2"></i> Obrir streaming</a>
-                </div>
+                    <div class="alert alert-warning text-center mb-4">
+                        No hay enlace de streaming válido para este evento.
+                    </div>
                 {% endif %}
             </div>
-        </div>
         {% endif %}
+
+        <div class="mb-4">
+            <h5>Descripció</h5>
+            <div class="card">
+                <div class="card-body">
+                    {{ event.description|linebreaks }}
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Columna lateral con miniatura, etiquetas, estado y accesos rápidos -->
+    <!-- Columna derecha: SOLO EL INCLUDE DEL CHAT -->
     <div class="col-lg-4">
-
-        <!-- Miniatura del evento o icono por defecto -->
-        <div class="card mb-4">
-            {% if event.thumbnail %}
-            <img src="{{ event.thumbnail.url }}" class="card-img-top" style="max-height: 300px; object-fit: cover;">
-            {% else %}
-            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-                <i class="fas fa-calendar-alt fa-4x text-light"></i>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Etiquetas del evento como filtros rápidos -->
-        {% if event.get_tags_list %}
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-tags"></i> Etiquetes</h5>
-                <div class="d-flex flex-wrap gap-2">
-                    {% for tag in event.get_tags_list %}
-                    <a href="{% url 'events:event_list' %}?search={{ tag }}" class="badge bg-light text-dark border">{{ tag }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Información del estado en tiempo real (próximo, en directo...) -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-info-circle"></i> Informació de l'estat</h5>
-
-                <div class="list-group list-group-flush">
-
-                    <!-- Estado actual -->
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        Estat actual
-                        <span class="badge 
-                            {% if event.status == 'live' %}bg-success
-                            {% elif event.status == 'scheduled' %}bg-info
-                            {% elif event.status == 'finished' %}bg-secondary
-                            {% else %}bg-danger{% endif %}">
-                            {{ event.get_status_display }}
-                        </span>
-                    </div>
-
-                    <!-- Tiempo hasta el evento -->
-                    {% if event.is_upcoming %}
-                    <div class="list-group-item">
-                        <small class="text-muted"><i class="far fa-clock"></i> Comença en {{ event.scheduled_date|timeuntil:now }}</small>
-                    </div>
-                    {% elif event.is_live %}
-                    <div class="list-group-item">
-                        <small class="text-success"><i class="fas fa-circle"></i> EN DIRECTE ARA</small>
-                    </div>
-                    {% endif %}
-
-                    <!-- Última actualización -->
-                    <div class="list-group-item">
-                        <small class="text-muted"><i class="fas fa-sync-alt"></i> Actualitzat: {{ event.updated_at|date:"d/m/Y H:i" }}</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Acciones rápidas (volver, filtrar, recordar) -->
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Accions ràpides</h5>
-
-                <div class="d-grid gap-2">
-                    <a href="{% url 'events:event_list' %}" class="btn btn-outline-primary"><i class="fas fa-list"></i> Tornar al llistat</a>
-                    <a href="{% url 'events:events_by_category' event.category %}" class="btn btn-outline-secondary"><i class="fas fa-filter"></i> Més {{ event.get_category_display|lower }}</a>
-
-                    {% if user.is_authenticated and not is_creator %}
-                    <!-- Botón opcional de recordatorio -->
-                    <button class="btn btn-outline-success"><i class="far fa-bell"></i> Recorda'm</button>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
+        {% include 'chat/includes/chat_box.html' %}
     </div>
 
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Cargar el JavaScript del chat AL FINAL -->
+<script src="{% static 'chat/js/chat.js' %}"></script>
+{% endblock %}
+
+{% block extra_css %}
+<!-- Cargar el CSS del chat -->
+<link rel="stylesheet" href="{% static 'chat/css/chat.css' %}">
 {% endblock %}

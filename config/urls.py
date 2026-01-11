@@ -45,6 +45,10 @@ urlpatterns = [
     path('users/', include('users.urls', namespace='users')),
     # Incluir URLs de events
     path('events/', include('events.urls')),
+    
+    # Incluir URLs del chat
+    path('chat/', include('chat.urls', namespace='chat')),
+
 ]
 
 # Configuración para servir archivos media en desarrollo

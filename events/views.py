@@ -5,11 +5,14 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.utils import timezone
 from .models import Event
+from chat.models import ChatMessage
 from .forms import EventCreationForm, EventUpdateForm, EventSearchForm
 import traceback
 from datetime import datetime
 from django.http import JsonResponse
 from django.db.models import Count
+from events.models import Event
+
 
 def event_list_view(request):
     """
@@ -100,27 +103,33 @@ def event_list_view(request):
         
         return render(request, 'events/event_list.html', context)
 
-def event_detail_view(request, pk):
-    """
-    Vista de detall d'esdeveniment
-    """
-    # Sin select_related para MongoDB
+def event_detail_view(request, pk): 
     event = get_object_or_404(Event, pk=pk)
-    
-    # Verificar si l'usuari és el creador
+
     is_creator = request.user.is_authenticated and request.user == event.creator
-    
-    # Generar URL embed per al streaming
-    embed_url = event.get_stream_embed_url()
-    
+
+    # Aquí pasamos el host al método para Twitch
+    embed_url = event.get_stream_embed_url(host=request.get_host())
+
+    # Obtener mensajes de forma segura
+    chat_messages = []
+    try:
+        qs = ChatMessage.objects.filter(event=event, is_deleted=False).order_by('created_at')
+        chat_messages = list(qs)
+    except Exception as e:
+        print("Error cargando mensajes:", e)
+
     context = {
         'event': event,
         'is_creator': is_creator,
-        'embed_url': embed_url,
+        'embed_url': embed_url,   # Ya lista para iframe
+        'chat_messages': chat_messages,
         'now': timezone.now(),
+        'request_host': request.get_host(),  # Por si lo necesitas en el template
     }
-    
+
     return render(request, 'events/event_detail.html', context)
+
 
 @login_required
 def event_create_view(request):

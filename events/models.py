@@ -106,6 +106,37 @@ class Event(models.Model):
         auto_now=True,
         verbose_name='Última actualització'
     )
+    ################################
+    # CAMPOS PARA BÚSQUEDA SEMÁNTICA
+    ################################
+    # Aqui se almacena el vector semántico en cuestión
+    embedding = models.JSONField(
+        blank=True,
+        null=True,
+        # Para el admin de Django
+        verbose_name='Vector semàntic',
+        help_text='Vector de 384 dimensions per cerca semàntica'
+    )
+    
+    # Almacenamos el modelo de sentence-transformers
+    embedding_model = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        # Para el admin de Django
+        verbose_name='Model d\'embedding utilitzat',
+        help_text='Nom del model de sentence-transformers utilitzat'
+    )
+    
+    # Almacenamos la data de la actualització del embedding
+    embedding_updated_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        # Para el admin de Django
+        verbose_name='Data actualització embedding',
+        help_text='Última vegada que es va calcular l\'embedding'
+    )
+    
     class Meta:
         ordering = ['-created_at']  # Ordena eventos por fecha de creación descendente
         verbose_name = 'Esdeveniment'
@@ -247,4 +278,3 @@ class Event(models.Model):
             return f"https://player.twitch.tv/?channel={channel}&parent={host}"
 
         return None
-

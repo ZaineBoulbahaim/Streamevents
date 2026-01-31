@@ -14,9 +14,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # apps
     'users',  # MOD: App d'usuari personalitzada
     'events',  # MOD: App d'events
     'chat',  # MOD: App de chat
+    'semantic_search',  # MOD: App de cerca semàntica
 ]
 
 MIDDLEWARE = [

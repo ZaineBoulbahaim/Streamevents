@@ -48,6 +48,9 @@ urlpatterns = [
     
     # Incluir URLs del chat
     path('chat/', include('chat.urls', namespace='chat')),
+    
+    # Incluir URLs de semantic_search
+    path('', include('semantic_search.urls')),  # Rutas de semantic_search
 
 ]
 

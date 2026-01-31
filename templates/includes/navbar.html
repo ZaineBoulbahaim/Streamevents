@@ -1,6 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="{% url 'home' %}">StreamEvents</a>
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <i class="fas fa-video"></i> StreamEvents
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,16 +10,29 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item me-3">
-          <a class="nav-link" href="{% url 'events:event_list' %}">Tots els Events</a>
+          <a class="nav-link" href="{% url 'events:event_list' %}">
+            <i class="fas fa-calendar-alt"></i> Tots els Events
+          </a>
+        </li>
+        
+        <!-- ✅ NUEVO: Búsqueda Semántica -->
+        <li class="nav-item me-3">
+          <a class="nav-link" href="{% url 'semantic_search:semantic' %}">
+            <i class="fas fa-brain"></i> Cerca Intel·ligent
+          </a>
         </li>
         
         {% if user.is_authenticated %}
         <li class="nav-item me-3">
-          <a class="nav-link" href="{% url 'events:my_events' %}">Els meus Events</a>
+          <a class="nav-link" href="{% url 'events:my_events' %}">
+            <i class="fas fa-user-circle"></i> Els meus Events
+          </a>
         </li>
         
         <li class="nav-item me-3">
-          <a class="nav-link" href="{% url 'events:event_create' %}">Crear Event</a>
+          <a class="nav-link" href="{% url 'events:event_create' %}">
+            <i class="fas fa-plus-circle"></i> Crear Event
+          </a>
         </li>
         {% endif %}
       </ul>
@@ -26,21 +41,37 @@
         {% if user.is_authenticated %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-              {{ user.username }}
+              <i class="fas fa-user"></i> {{ user.username }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="{% url 'users:profile' %}">Perfil</a></li>
-              <li><a class="dropdown-item" href="{% url 'events:my_events' %}">Els meus Events</a></li>
+              <li>
+                <a class="dropdown-item" href="{% url 'users:profile' %}">
+                  <i class="fas fa-id-card"></i> Perfil
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'events:my_events' %}">
+                  <i class="fas fa-calendar-check"></i> Els meus Events
+                </a>
+              </li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item text-danger" href="{% url 'users:logout' %}">Tancar Sessió</a></li>
+              <li>
+                <a class="dropdown-item text-danger" href="{% url 'users:logout' %}">
+                  <i class="fas fa-sign-out-alt"></i> Tancar Sessió
+                </a>
+              </li>
             </ul>
           </li>
         {% else %}
           <li class="nav-item me-2">
-            <a class="nav-link" href="{% url 'users:login' %}">Inicia Sessió</a>
+            <a class="nav-link" href="{% url 'users:login' %}">
+              <i class="fas fa-sign-in-alt"></i> Inicia Sessió
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:register' %}">Registra't</a>
+            <a class="nav-link" href="{% url 'users:register' %}">
+              <i class="fas fa-user-plus"></i> Registra't
+            </a>
           </li>
         {% endif %}
       </ul>

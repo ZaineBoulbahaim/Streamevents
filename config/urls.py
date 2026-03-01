@@ -51,7 +51,9 @@ urlpatterns = [
     
     # Incluir URLs de semantic_search
     path('', include('semantic_search.urls')),  # Rutas de semantic_search
-
+    
+    # Incluir URLs de assistant_chat
+    path('', include('assistant_chat.urls', namespace='assistant_chat')),
 ]
 
 # Configuración para servir archivos media en desarrollo

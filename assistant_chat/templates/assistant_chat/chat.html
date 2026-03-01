@@ -1,0 +1,94 @@
+{% extends "users/base.html" %}
+{% load static %}
+
+{% block title %}Assistent d'esdeveniments{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+
+    <!-- Título de la página -->
+    <h2 class="mb-4">🎯 Assistent d'esdeveniments</h2>
+
+    <!-- Aviso si el usuario no está autenticado -->
+    {% if not user.is_authenticated %}
+    <div class="alert alert-warning">
+      ⚠️ No has iniciat sessió. Les teves converses no es guardaran.
+    </div>
+    {% endif %}
+
+    <!-- Tarjeta principal del chat -->
+    <div class="card shadow-sm">
+      <div class="card-body">
+
+        <!-- Checkbox para filtrar solo eventos futuros -->
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="onlyFuture" checked>
+          <label class="form-check-label" for="onlyFuture">
+            Només esdeveniments futurs
+          </label>
+        </div>
+
+        <!-- Zona de burbujitas del chat -->
+        <div
+          id="chatBox"
+          class="border rounded p-3 mb-3 bg-white"
+          style="height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;"
+        >
+          <!-- Cargamos el historial previo si el usuario está autenticado -->
+          {% for message in history %}
+            {% if message.role == "user" %}
+              <!-- Burbuja del usuario: alineada a la derecha -->
+              <div class="d-flex justify-content-end">
+                <div class="bg-primary text-white rounded p-2 px-3" style="max-width: 75%;">
+                  {{ message.text }}
+                </div>
+              </div>
+            {% else %}
+              <!-- Burbuja del asistente: alineada a la izquierda -->
+              <div class="d-flex justify-content-start">
+                <div class="bg-light border rounded p-2 px-3" style="max-width: 75%;">
+                  {{ message.text }}
+                </div>
+              </div>
+            {% endif %}
+          {% empty %}
+            <!-- Mensaje inicial si no hay historial -->
+            <div class="text-center text-muted mt-auto mb-auto">
+              <p>👋 Hola! Pregunta'm qualsevol cosa sobre els esdeveniments.</p>
+              <p class="small">Ex: "Vull un concert de jazz aquest cap de setmana"</p>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Indicador de carga mientras espera respuesta -->
+        <div id="loadingBox" class="text-center d-none mb-2">
+          <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+          <span class="text-muted ms-2">Pensant...</span>
+        </div>
+
+        <!-- Input del mensaje + botón enviar -->
+        <div class="input-group">
+          <input
+            type="text"
+            id="userMessage"
+            class="form-control"
+            placeholder="Escriu el teu missatge..."
+          >
+          <button class="btn btn-primary" id="sendBtn">Enviar</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Zona donde aparecen las cards de eventos recomendados -->
+    <div id="eventsBox" class="mt-4"></div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <!-- Cargamos el archivo JS externo -->
+  <script src="{% static 'assistant_chat/chat.js' %}"></script>
+{% endblock %}
